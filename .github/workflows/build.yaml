@@ -29,6 +29,6 @@ jobs:
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          repository: ${{ github.repository_owner }}/deployment-chart
+          repository: ${{ github.repository_owner }}/polycloud-helm
           event-type: update-storage
           client-payload: '{"tag": "${{ env.IMAGE_TAG }}"}'
