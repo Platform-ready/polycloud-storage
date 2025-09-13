@@ -9,18 +9,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build & Push
         run: |
-          IMAGE=ghcr.io/${{ github.repository_owner }}/storage-service
+          ORG=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          IMAGE=ghcr.io/$ORG/storage-service
           TAG=${GITHUB_SHA::7}
           docker build -t $IMAGE:$TAG -f build/docker/Dockerfile .
           docker push $IMAGE:$TAG
           echo "IMAGE_TAG=$TAG" >> $GITHUB_ENV
+
       - name: Trigger deployment-chart
         uses: peter-evans/repository-dispatch@v3
         with:
